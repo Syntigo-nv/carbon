@@ -31,6 +31,10 @@ def process(metric, datapoint):
   for rule in RewriteRuleManager.postRules:
     metric = rule.apply(metric)
 
-  if metric not in aggregate_metrics:
-    log.msg("Couldn't match metric %s with any aggregation rule. Passing on un-aggregated." % metric)
+# TODO review how to configure forwarding of original event (on match/no-match)
+  if not aggregate_metrics:
+#### pass on unaggregated metric
     events.metricGenerated(metric, datapoint)
+#  elif metric not in aggregate_metrics: 
+####  prevent metric from overwriting aggregated metric
+#    events.metricGenerated(metric, datapoint)
